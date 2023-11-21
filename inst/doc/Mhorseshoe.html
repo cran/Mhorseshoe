@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Mhorseshoe</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Mhorseshoe</h1>
+
+
+
+<p>In this vignette, the functions exact_horseshoe, approx_horseshoe are
+explained in the following sections.</p>
+<ol style="list-style-type: decimal">
+<li>About the horseshoe estimator in this package</li>
+<li>Brief Description of approximate MCMC algorithm</li>
+</ol>
+<div id="about-the-horseshoe-estimator-in-this-package" class="section level1">
+<h1>1. About the horseshoe estimator in this package</h1>
+<p>The horseshoe prior is a continuous reduced prior distribution
+frequently used in high-dimensional Bayesian linear models, and can be
+effectively applied to sparse data. This is a method that theoretically
+guarantees excellent shrinkage properties. Mhorseshoe provides an
+estimator applying the horseshoe prior, The likelihood function of the
+Gaussian linear model to be considered in this package is as
+follows:</p>
+<p><span class="math display">\[L(y\ |\ x, \beta, \sigma^2) =
+(\frac{1}{\sqrt{2\pi}\sigma})^{-N/2}exp
+\{ -\frac{1}{2\sigma^2}(y-X\beta)^T(y-X\beta)\},\\ X \in
+\mathbb{R}^{N \times p},\ y \in \mathbb{R}^{N},\ \beta \in
+\mathbb{R}^{p}\]</span></p>
+<p>And the form of the hierarchical model applying the horseshoe prior
+to <span class="math inline">\(\beta\)</span> is expressed as
+follows:</p>
+<p><span class="math display">\[\beta_{j}\ |\ \sigma^{2}, \tau^{2},
+\lambda_{j}^{2}
+\overset{i.i.d}{\sim} N\left(0, \sigma^{2}\tau^{2}\lambda_{j}^{2}
+\right),
+\quad \lambda_{j}\overset{i.i.d}{\sim}C^{+}(0,1),\quad j=1,2,...,p, \\
+\tau
+\overset{i.i.d}{\sim}C^{+}(0,1),\quad p(\sigma^2)\propto gamma\left(
+w/2, w/2\right).\]</span></p>
+<p>Where <span class="math inline">\(C^{+}(0,1)\)</span> is a
+half-Cauchy distribution, <span class="math inline">\(\lambda_{1}, ...,
+\lambda_{p}\)</span> are local shrinkage parameters, and <span class="math inline">\(\tau\)</span> is global shrinkage parameter. The
+exact_horseshoe in this package is a horseshoe estimator for the prior
+defined above, as described in exact MCMC algorithm of Johndrow et
+al. (2020). The blocked Metropolis-within-Gibb that samples <span class="math inline">\(\eta,\ \left(\tau, \sigma, \beta \right)\)</span>
+is adopted, and the brief process is as follows.</p>
+<p><span class="math display">\[\xi = \tau^{-2},\quad \eta_{j} =
+\lambda_{j}^{-2},\quad
+j = 1,2,...,p, \\ D = diag\left(\eta_{1}^{-1},..., \eta_{p}^{-1}
+\right),
+\quad M_{\xi} = I_{N} + \xi^{-1}XDX^{T}, \\ p(\xi | y, X, \eta) \propto
+|M_{\xi}|^{-1/2}\{(w + y^{T}M_{\xi}^{-1}y) / 2 \}^{-(w + N) / 2}/
+\{\sqrt{\xi}(1+\xi)\}.\]</span></p>
+<ol style="list-style-type: decimal">
+<li>Sample , using the following posterior of for rejection sampling.
+<span class="math display">\[p(\eta_{j} | \xi, \beta_{j}, \sigma^{2})
+\propto \frac{1}{1 +
+\eta_{j}}exp\{-\frac{\beta_{j}^{2}\xi \eta_{j}}{2\sigma^{2}}
+\}.\]</span></li>
+<li>Sample using the proposed MH algorithm as follows. <span class="math display">\[log(\xi^{\star}) \sim N(log(\xi), s), accept\ \xi
+\ w.p.\
+\{p(\xi^{\star} | y, X, \eta)\xi^{\star}\}/\{p(\xi | y, X, \eta)\xi
+\}.\]</span></li>
+<li>Sample <span class="math inline">\(\sigma^{2}\)</span>, <span class="math display">\[\sigma^{2} | y, X, \eta, \xi \sim
+InvGamma\{(w + N) / 2, (w + y^{T}M_{\xi}^{-1}y) / 2 \}.\]</span></li>
+<li>Sample <span class="math inline">\(\beta\)</span>, <span class="math display">\[\beta | y, X, \eta, \xi, \sigma \sim
+N\left(\left(X^{T}X + \left(\xi^{-1} D \right)^{-1}\right)^{-1}X^{T}y,
+\ \sigma^{2}\left(X^{T}X + \left(\xi^{-1} D \right)^{-1} \right)^{-1}
+\right).\]</span></li>
+</ol>
+<p>Since the algorithm of this package considers the case of <span class="math inline">\(p &gt;&gt; N\)</span>, the computational cost can
+be lowered by sampling <span class="math inline">\(\beta\)</span> using
+fast sampling(Bhattacharya et al.,2016) in the step 4.</p>
+<p><span class="math display">\[u \sim N_{p}(0, \xi^{-1}D),\quad f \sim
+N_{N}(0, I_{N}), \\
+v = Xu + f,\quad v^{\star} = M_{\xi}^{-1}(y/\sigma - v), \\
+\beta = \sigma(u + \xi^{-1}DX^{T}v^{\star}).\]</span></p>
+<p>For simulation, the data size was set to N = 300, p = 500, and the
+design matrix <span class="math inline">\(X=\{x_{j}
+\}_{j=1}^{p}\)</span>, true value of beta were set as follows.</p>
+<p><span class="math display">\[x_{j} \sim N_{N}\left(0, I_{N} \right),
+\\ y_{i} \sim N(x_{i}\beta, 4), \\
+\beta_{j} = \begin{cases} 1, &amp; \mbox{if }\ \mbox{j&lt;51,} \\ 0,
+&amp;
+\mbox{otherwise.}\end{cases}\]</span></p>
+<p>As a caution, the data is for testing the application of the
+algorithm and is not a simulation that strictly considers sparsity
+condition.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># making simulation data.</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">300</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">500</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>p_star <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>true_beta <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">1</span>, p_star), <span class="fu">rep</span>(<span class="dv">0</span>, p<span class="sc">-</span>p_star))</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="co"># design matrix X.</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="at">nrow =</span> N, <span class="at">ncol =</span> p)</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>p) {</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>  X[, i] <span class="ot">&lt;-</span> stats<span class="sc">::</span><span class="fu">rnorm</span>(N, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>}</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>  </span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="co"># response variable y.</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">&quot;numeric&quot;</span>, <span class="at">length =</span> N)</span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>e <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(N, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">2</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>p_star) {</span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>  y <span class="ot">&lt;-</span> y <span class="sc">+</span> true_beta[i] <span class="sc">*</span> X[, i]</span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>}</span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a>y <span class="ot">&lt;-</span> y <span class="sc">+</span> e</span></code></pre></div>
+<p>For the corresponding simulation data, the results were compared with
+the horseshoe function of the horseshoe package. We fit the data to the
+horseshoe and exact_horseshoe functions and plot the results for the
+first 100 indices, including the first 50 indices that are non-zero
+coefficients.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># horseshoe in horseshoe package.</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>horseshoe_result <span class="ot">&lt;-</span> horseshoe<span class="sc">::</span><span class="fu">horseshoe</span>(y, X, <span class="at">method.tau =</span> <span class="st">&quot;halfCauchy&quot;</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>                                         <span class="at">method.sigma =</span> <span class="st">&quot;Jeffreys&quot;</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>                                         <span class="at">burn =</span> <span class="dv">0</span>, <span class="at">nmc =</span> <span class="dv">500</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co"># exact_horseshoe.</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>exact_horseshoe_result <span class="ot">&lt;-</span> <span class="fu">exact_horseshoe</span>(X, y, <span class="at">burn =</span> <span class="dv">0</span>, <span class="at">iter =</span> <span class="dv">500</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">index =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>                 <span class="at">horseshoe_BetaHat =</span> horseshoe_result<span class="sc">$</span>BetaHat[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>],</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>                 <span class="at">horseshoe_LeftCI =</span> horseshoe_result<span class="sc">$</span>LeftCI[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>],</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>                 <span class="at">horseshoe_RightCI =</span> horseshoe_result<span class="sc">$</span>RightCI[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>],</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>                 <span class="at">exhorseshoe_BetaHat =</span> exact_horseshoe_result<span class="sc">$</span>BetaHat[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>],</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>                 <span class="at">exhorseshoe_LeftCI =</span> exact_horseshoe_result<span class="sc">$</span>LeftCI[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>],</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>                 <span class="at">exhorseshoe_RightCI =</span> exact_horseshoe_result<span class="sc">$</span>RightCI[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>],</span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>                 <span class="at">true_beta =</span> true_beta[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>])</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="co"># Estimation results of the horseshoe.</span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> df, <span class="fu">aes</span>(<span class="at">x =</span> index, <span class="at">y =</span> true_beta)) <span class="sc">+</span> </span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> </span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> index, <span class="at">y =</span> horseshoe_BetaHat), <span class="at">size =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> horseshoe_LeftCI,</span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a>                    <span class="at">ymax =</span> horseshoe_RightCI), <span class="at">width =</span> .<span class="dv">1</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;95% Credible intervals of the horseshoe function&quot;</span>, <span class="at">y =</span> <span class="st">&quot;beta&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co"># Estimation results of the exact_horseshoe.</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> df, <span class="fu">aes</span>(<span class="at">x =</span> index, <span class="at">y =</span> true_beta)) <span class="sc">+</span> </span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> </span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> index, <span class="at">y =</span> exhorseshoe_BetaHat), </span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>             <span class="at">size =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> exhorseshoe_LeftCI, </span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>                    <span class="at">ymax =</span> exhorseshoe_RightCI), <span class="at">width =</span> .<span class="dv">1</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;95% Credible intervals of the exact_horseshoe function&quot;</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;beta&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>The results for both functions were similar. Both functions estimate
+that 95% of the credible intervals for all non-zero indices except 4,
+36, 41, and 46 include 1.</p>
+</div>
+<div id="approximate-mcmc-algorithm" class="section level1">
+<h1>2. approximate MCMC algorithm</h1>
+<p>In general, the disadvantage of the horseshoe estimator is that the
+computational cost is large for high-dimensional data where <span class="math inline">\(p&gt;&gt;N\)</span>. To overcome these
+limitations, Johndrow et al. (2020) proposed a scalable approximate MCMC
+algorithm that can reduce computational costs by introducing a
+thresholding method while applying the horseshoe prior. This algorithm
+has the following simple changes compared to the exact algorithm in
+section 1.</p>
+<p><span class="math display">\[D_{\delta} =
+diag\left(\eta_{j}^{-1}1\left(\xi^{-1}\eta_{j}^{-1}
+&gt; \delta,\ j=1,2,...,p. \right) \right),\]</span> <span class="math display">\[M_{\xi} \approx M_{\xi, \delta} = I_{N} +
+\xi^{-1}XD_{\delta}X^{T}.\]</span></p>
+<p>The set of columns that satisfies the condition (<span class="math inline">\(\xi^{-1}\eta_{j}^{-1} &gt; \delta\)</span>) is
+defined as the active set, and let’s define <span class="math inline">\(S\)</span> as the index set of the following
+columns.</p>
+<p><span class="math display">\[S = \{j\ |\ \xi^{-1}\eta_{j}^{-1} &gt;
+\delta,\ j=1,2,...,p. \}.\]</span></p>
+<p>If <span class="math inline">\(\xi^{-1}\eta_{j}^{-1}\)</span> is very
+small, the posterior of <span class="math inline">\(\beta\)</span> will
+have a mean and variance close to 0. Therefore, let’s set <span class="math inline">\(\xi^{-1}\eta_{j}^{-1}\)</span> smaller than <span class="math inline">\(\delta\)</span> to 0 and the size of inverse <span class="math inline">\(M_{\xi, \delta}\)</span> matrix is reduced as
+follows.</p>
+<p><span class="math display">\[length(S)=s_{\delta} \le p, \\ X_{S} \in
+R^{N \times s_{\delta}},
+\quad D_{S} \in R^{s_{\delta} \times s_{\delta}}, \\ M_{\xi,
+\delta}^{-1} =
+\left(I_{N} + \xi^{-1}X_{S}D_{S}X_{S}^{T} \right)^{-1}.\]</span></p>
+<p><span class="math inline">\(M_{\xi, \delta}^{-1}\)</span> can be
+expressed using the Woodbury identity as follows.</p>
+<p><span class="math display">\[M_{\xi, \delta}^{-1} = I_{N} -
+X_{S}\left(\xi D_{S}^{-1} +
+X_{S}^{T}X_{S} \right)^{-1}X_{S}^{T}.\]</span></p>
+<p><span class="math inline">\(M_{\xi, \delta}^{-1}\)</span>, which
+reduces the computational cost, is applied to all parts of this
+algorithm, <span class="math inline">\(\beta\)</span> samples are
+extracted from the posterior using fast sampling(Bhattacharya et
+al.,2016) as follows.</p>
+<p><span class="math display">\[u \sim N_{p}(0, \xi^{-1}D),\quad f \sim
+N_{N}(0, I_{N}), \\
+v = Xu + f,\quad v^{\star} = M_{\xi, \delta}^{-1}(y/\sigma - v), \\
+\beta = \sigma(u + \xi^{-1}D_{\delta}X^{T}v^{\star}).\]</span></p>
+<p>The above changed algorithm is implemented in the approx_horseshoe
+and the mapprox_horseshoe functions of this package. The
+approx_horseshoe uses a fixed <span class="math inline">\(\delta\)</span>, while the mapprox_horseshoe uses
+an algorithm that updates <span class="math inline">\(\delta\)</span>
+using adaptive probability.</p>
+<div id="modified-approximate-algorithm" class="section level3">
+<h3>modified approximate algorithm</h3>
+<p>The modified approximate algorithm developed in this package
+estimates new threshold through updated shrinkage parameters and adds an
+adaptive probability algorithm that updates the threshold. the process
+of updating a new threshold is added by applying the properties of the
+shrinkage weight <span class="math inline">\(k_{j},\
+j=1,2,...,p\)</span> proposed by Piironen and Vehtari (2017). In the
+prior of <span class="math inline">\(\beta_{j} \sim N(0,
+\sigma^{2}\tau^{2}\lambda_{j}^{2}) = N(0,
+\sigma^{2}\xi^{-1}\eta_{j}^{-1})\)</span>, the variable <span class="math inline">\(m_{eff}\)</span> is defined as follows.</p>
+<p><span class="math display">\[k_{j} =
+1/\left(1+n\xi^{-1}s_{j}^{2}\eta_{j}^{-1} \right),
+\quad j=1,2,...,p, \\ m_{eff} = \sum_{j=1}^{p}{\left(1-k_{j}
+\right)}.\]</span></p>
+<p><span class="math inline">\(s_{j},\ j=1,2,...,p\)</span> are the
+diagonal components of <span class="math inline">\(X^{T}X\)</span>. For
+the zero components of <span class="math inline">\(\beta\)</span>, <span class="math inline">\(k_{j}\)</span> is derived close to 1, and
+nonzero’s <span class="math inline">\(k_{j}\)</span> is derived close to
+0, so the variable <span class="math inline">\(m_{eff}\)</span> is
+called the effective number of nonzero coefficients. In this algorithm,
+the threshold <span class="math inline">\(\delta\)</span> is updated to
+set <span class="math inline">\(s_{\delta} =
+ceiling(m_{eff})\)</span>.</p>
+<p>Adaptive probability is defined to satisfy Theorem 5(diminishing
+adaptation condition) of Roberts and Rosenthal (2007). at <span class="math inline">\(T\)</span>th iteration,</p>
+<p><span class="math display">\[p(T) = exp[p_{0} + p_{1}T],\quad p_{1}
+&lt; 0,
+\quad u \sim U(0, 1), \\ if\ u &lt; p(T),\ update\ \delta\ so\ that\
+s_{\delta} = ceiling(m_{eff}).\]</span></p>
+<p>The default is <span class="math inline">\(p_{0} = 0\)</span>, <span class="math inline">\(p_{1} = -4.6 \times 10^{-4}\)</span>, and under
+this condition, <span class="math inline">\(p(10000) &lt; 0.01\)</span>
+is satisfied.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># approx_horseshoe with fixed default threshold.</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>approx_horseshoe_result <span class="ot">&lt;-</span> <span class="fu">approx_horseshoe</span>(X, y, <span class="at">burn =</span> <span class="dv">0</span>, <span class="at">iter =</span> <span class="dv">500</span>, </span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>                                            <span class="at">auto.threshold =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; You chose FALSE for the auto.threshold argument. and since threshold = 0, set it to the default value of 0.002.</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co"># modified approx_horseshoe with adaptive probability algorithm.</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>mapprox_horseshoe_result <span class="ot">&lt;-</span> <span class="fu">approx_horseshoe</span>(X, y, <span class="at">burn =</span> <span class="dv">0</span>, <span class="at">iter =</span> <span class="dv">500</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">index =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>                  <span class="at">approx_BetaHat =</span> approx_horseshoe_result<span class="sc">$</span>BetaHat[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>],</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>                  <span class="at">approx_LeftCI =</span> approx_horseshoe_result<span class="sc">$</span>LeftCI[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>],</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>                  <span class="at">approx_RightCI =</span> approx_horseshoe_result<span class="sc">$</span>RightCI[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>],</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>                  <span class="at">mapprox_BetaHat =</span> mapprox_horseshoe_result<span class="sc">$</span>BetaHat[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>],</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>                  <span class="at">mapprox_LeftCI =</span> mapprox_horseshoe_result<span class="sc">$</span>LeftCI[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>],</span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>                  <span class="at">mapprox_RightCI =</span> mapprox_horseshoe_result<span class="sc">$</span>RightCI[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>],</span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>                  <span class="at">true_beta =</span> true_beta[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>])</span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co"># Estimation results of the approx_horseshoe.</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> df2, <span class="fu">aes</span>(<span class="at">x =</span> index, <span class="at">y =</span> true_beta)) <span class="sc">+</span> </span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> </span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> index, <span class="at">y =</span> approx_BetaHat), <span class="at">size =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> approx_LeftCI, </span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a>                    <span class="at">ymax =</span> approx_RightCI), <span class="at">width =</span> .<span class="dv">1</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;95% Credible intervals of the approx_horseshoe&quot;</span>, <span class="at">y =</span> <span class="st">&quot;beta&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co"># Estimation results of the mapprox_horseshoe.</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> df2, <span class="fu">aes</span>(<span class="at">x =</span> index, <span class="at">y =</span> true_beta)) <span class="sc">+</span> </span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> </span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> index, <span class="at">y =</span> mapprox_BetaHat), </span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>             <span class="at">size =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> mapprox_LeftCI, </span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>                    <span class="at">ymax =</span> mapprox_RightCI), </span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>                <span class="at">width =</span> .<span class="dv">1</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;95% Credible intervals of the modified_approx_horseshoe&quot;</span>, </span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;beta&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAkAAAAGACAMAAAByRC0tAAAAElBMVEUAAAAzMzNNTU3r6+v/AAD///8LpQVQAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAWTklEQVR4nO2diXqkIBCE3RHf/5U3yajQF4eNd9W3mShSNMI/gI6ZHSYIcmg4uwLQvQWAIJcAEOQSAIJcAkCQSwAIcgkAQS4BIMilzQANP1o3vpvxt8iZC/N7cPmJKUomay9fdObgegYNRSoRZr9+mhvLzYQ7ylVZ9lYfwWbtAgpCkjNzDicBNHQFyDxJAKTb4lCz1k4HKGKWL6sAkG6pq2bpmBegbCQApNtWgGg//PyIAUgeje/VYU5ajw5p6UlRMcOQzpVrfj6cxEGRT6HroXQO5mXQyEtQdjCp/Lc0Xu+YRsMPEzvbdCutYtqASWVoRdZaiBrSWEr1O4DVA6CB7cmM687a/+n0J2aB2MOMzmHpKJojnT9IScrkEg9xgFhxzCAPplESgJQMvAn42ZItcl7KeC4qktTPaBb13JTKbZEHINEQ4t0uAYq2pIDVK/fSclirsnImenSKBaXVGIyySeHsqFVJmi7cMQNvDrsgrVWof9D9egWUhhM1d2prCenbL9b1+y5MIWIA0Velp5W9Sc+ulrMahqQH9CoIgJTS6FGlDhJTsxzSdHZBskWp13YNMouSVKpdqzYXMMOy7iXpae+ovSfh0/bIGKsCpEIcj2i9UAWQiNwEkFIr0mwNAIkOtl3rabL5ynb1mcNcBSgADUN6UocCtMROGI5ty6twEkC8ah0BWk6TVD+Z3q4KEDtRDtC6pTVpHqBMqKRZkhIjQNSRElQFkIjcBJA8O1ZYPUANU9h6moLYksunjcXQVpWYsJNieZN3a3KKyh4BUwLEO43G4l0bswy8ihMtXESe1CoPWhTt7ES7ZQpSC6Z+pbWMCigNRyvmx2hrAXH8U2eapGJkTla9EZk0Hx1hlXaYeLkTLVUUS4Orb1wj8qRVi0XJZODNxs/Wap8cQPxEeHm8gkbt9N5t0OYSYnTGD0mgGaTjdyPpgyE5VVqMBtA0kPzxbIa02Ik1lDAJgGTk5MWuvJ2Bt4U4W1YlRgaxy1qm2PH2lgWp/eZQhyKgLWJD3G1168rfWQAIqtWwiiTKrRb/VXTFOj1NAAiCLAEgyCUABLkEgCCXABDkEgCCXNoG0CilpVUK1gtbLS8AgtXlBUCwurwACFaXFwDB6vICIFhdXgAEq8sLgGB1eQEQrC4vAILV5QVAsLq8AAhWlxcAweryAiBYXd63ABROifogKwA6I+qDrADojKgPsgKgM6I+yPpwgFY+gkEKAHJa3wKQRQoAclrdAH3WjR8BoNdZvQBFaD5Jat86AqALW50AfVZuUn4A0Hus3aawdQb796OS6TAFZcvIAO2ieoCSbYxA77H2W0SfD5ACAwDa2wqAvFFfbu23BgJAr7T2AeiPnnhFD4DeY33SnWgAdIL1OgD5uxIAnWB9JEDxk1MAtLf1jgCVP1kHQIdZ7whQGQYAdJgVAFVHrdebrACoOmq93mQFQNVR6/UmKwCqjlqvN1kBUHXUer3JCoDsqMrtgpD3rNbNup0VAGWiAqDt3mcDpN2qVqJuAOiv5NtRcGOAKruSmYyy5JY1Au0G0AiA5uTdAGLND4B41HtZXwVQNoMSFQBt914QoIYFMQA6zAqAMlEB0HYvAHIAVLzOtwWAzgEoGBkCeekNkPZgEgCakwGQlsuKQ2sCgADQFoCUOM0CQH6ARPPvDpDa4QDI5d0ZoNxY0Akgyg4A2skKgNTyRgDk9AIgAOTyXgKgQKwbAAqBoASA+lsfDVAIfwQZAAXFSCsMgLZ7fQDlFNaXiWzJDfb1YblvG1MKDVP4Kh7kGaTRKDDoyVoFg0h+t+48As0AbRqBAkYgnxcAASCX91CAaNIl1kAAyOm9B0C0y2Sh8SoskmRkYFoBUuoGgCq8lwEohDaA9KRkLkujpkMUFQByei8D0F9XKnzQsthowgEKy3KIRiWLJCoA5PTeDyB1wXMUQMrgt00AKAdQkD3SDSD9kgsA7W09dgQ6C6DaNVCaAQC5vA8DqPIqDAB1894OoOwaaOQdq2TgoQGQy3t5gORe5ips5B0LgHpZLwNQcs+PHKsHqDJpNDLwahUAyqUDoOMBSiagIkB0qgJAp1ovAlC6BC4BxBbL2ngkCQNAO1nvB1B6T0cHSCMMAO1kvSpA6UsjQGoGALST9SIAiTXQfgAZeyPZAEBe79EA8aswG6DiGggAHWm9DEBmx7ZfheXXQNYen+MAkMt7ZYAqYBCE1cQBQB29twaomFRznQ+AXN5HA1R1na8BxD4tAUC298kA1V3nKwDN4CmPNQEgkfxAgJae3wpQiAJAJe9uAAVxuXMUQGvPdwAonQBzxTQLABUASt+/4zepA0Da2oR7kp6vXAPxkaYGIHZ2zQJAeYBI8/+pGiAGiTq25IpJQ1ddhUlQygDxs2sWANoLIA6JgUYdQNlpb66WmOi+hUhakxJSzzYBoJ0AynV/HUCtz7xqAGlD4ZiUAIBici1An3Xjs25aAA1h+Lbvz8bP3jD8Jc17Qd37fZkWXwhqLn7MKObb87kMpFprsWNMZ56/UxmSpMTTtzuua/UCtFLzSWHS4ww/TfzbxsPfxqx1L+h7c1KERMn1PVRTjLoXq0SqxQIOorw5rEwKw2aC3gbQZ6oHKOmkhKJKgAQkvCsri1H2kpIZ15RKXt7CNC108fTtjutau01hK0D/fqTmrITB6vkN0FUBlI5tFCAWugqg1VNqt7eoHaBfqaCurZudjnyjyS4AKVNVFqC/xL7v5+ta+49AJkCjBpBYvDjXM0oSW+I0A5QDxQSrc3dc13okQMuVTnLVJC6ftCuqabAumGouub79mfHwDPNl1cSrW3EVlpxB3+64rvVQgJZ7LXMLa59KLQnyTnT2No990yctkOQK9NvL5J3oJSklQqkITwdA3+QmgP7oKd8HGnmX7QZQLMYCaCVMFDMuURnvsg7qDUYA9E2uBUiVFUftRQKQ1rF5gBQOKgDSQLUAGiMPGYDomGc3eF4AqAkg7XPxOKEsnZcFSONA+ejdBZA6VbF0GtFs7pIAUBtAy8eTo4JGho+4oYxhMZ3Ol4cBlBTTLADUCJAyaaVwWXwUAZqxmTSPGnUzQLQiAGhJPgwgMRaQwYfxIUaTAmE2QPZDaHOtGgHSv1+kWQCoG0BBAUhZz+TnuAxApmdU48wHDI8C9zYBoD0AMqeJtd/6AqTGGWX2EocbBICaAbLWQJGfiSXlYGDDwEEAsekQAB0KkHUVtoLVABCfezoCpP1NYRBRAdCSvAdA2dnGHk2mlTB1bSJHLS9ASRwDbpKkT8LbBIAyAOXXu3Ynpdho93RYzg4ArVdhxvRKKwKAtOT+ALErquqOFf2zBaBiVNbzYSVeW+DToRAAackXB+jbf2I8stdApahivsoBxEDFGkhJvjZAIcTSzKllbASIctAAEK7ClOT+APVYA1Gm2Hw1ymJaAGK05NZAIrQ1EzYLAGUAar0KW7uSvcF7ApSkawAVbzEAoAvcB2ITkATIGiwOAChbUwBke08ByJjjlOeB1DXQKAuVALGeTz1yDWTWtCJpmwCQAyBrla09UBaUq7BRFioAykJH5isA5PKeDBDrymK/1QJUM+0BoB7ecwHikwkAuqz1SgCtayCxnG0EKB4DQHtbLwXQchXmBShutK2BAFA/7zkAzXs7AlSx8AZAPbynAuReA60bLfeBWAYA5PKeC5D3KmzdAEB7Wy8KEOvKhi4DQMda7wjQaJQwygwAaG/rPgBZCvMPe8ntaUlGhklmUJJoebFaIXSpG60N9NARaOQe+TEcRiCX92UAKR/DASCX93iARjNDN4CUDPNWLUBWaAAkkgGQCRCND4D05HcBVLsGosUopwKAluSXASQfhqwZgWRFANCSfC+ARlJC3KgHSIQGQC7vAQBZH2sCoDtZzwPIfLDCAmjNMPIMqQDQsdbjARq/G/ajXQDoTlYAZIUGQC4vAFIfIrGKAUAieW+ArrQGUkNPLXEAkEjeHaDmq7BRlHAYQEp+oyJKjZoEgOoAGte9hwGkldyihwM0/2dazwCICQB19aoADcs/AASACt4MQBUEWXF2AYiKJnUEaP6sPlMRAJQmnwcQPXYVgNanPXI1LYSo0OMBqpvDrDj3BSh5XihT00KICj0boC9Be6+BxLFLA0T+gq0QokIPB6hWVpwtI9C1AaJ/Q1sIUaFnAzTUQmXFaQRotVqgnL4GYn/FXwhRIQB0QYByGWh6BiD9KgwANQA0rHolQOpABoC2jEBlWXFkHzAOLgPQWAdQ5zVQeDhA1bLiFFcjfoCUqEYIJb0doPQqrBiiqMcD9Dd99b2MH/Wk2wCkVQQAHXgnetSTigBZJShR6zwAqKu3FqDP5xO3ls3uAFkCQIluCdBn/om/3gIQTQZAIrkVoJQfALRRTwdoEreBEoCWGezfjyZDIbNHk+q+o2nLNzlZHuWLp+ieYVQ8m/XAb6YqLJjpCHT7NVC64RiBNr+hHz8CZQCapq4AVVTRyl6wAqCu1m5TWA1ArAvOAahY1haANkflZT0bIPlhauMURgWAZFlvA2i+D/SZ0jtCjwKoGAwA6cmVAOmqi+MHqCgAtLe1cQ1Uxw8A2qhHAzR0eB6IqvZ+27EALQ+O7Q6Q+v55MEAtqotzSYDWR1cBkMv7VoDiw/MAyOUFQADI5QVAAMjlfStAWAN18r4WIFyF9fG+F6DD7gMBIABkJAMgAASAnF4A9FaAWp/HBUBficc2AJAr7OsAigJAPcICIACUSyqGBUAAKJdUDAuArguQUREA1FjFvawAqDJgNiwAAkClgNmwAAgAlQJmwx4BUK0AUFVFttw0VawAyGsFQJUBs2EBEAAqBcyGBUBPAMjqeQC0p9UAqLYzqqNuAShkagKAGqu4l9UagfLZ26PeGqCYBIC4bgFQXdQ6gML1ALq1Gr8mbPO3iuW+oC3rWb9LbXN5xpewhVzJxW+X04URqDJ7e9S6EYgPFqM5AjUsXqwRKFeyUpE/YQrjug9AVp/mktRCAVBPKwDSAgKgagGgeYfGAUC1AkB8DwA1CQDxPQDUpEMByt2RUYoHQFt0c4CyvWh0Je1FxQOAGvQEgKw+2A0g5f/BM7MCoK7WZwA0ugBS4gCgWnUCKJAMsUeU9KSsawPEKj+SJCoA1AMg7VbKVoCsjrUqksu1eQSSAFmQAqAuI1AbQCEEAASANgM0/xf0dO4BQEuBepwavQSg5fs9FY8soTtARnUBULseCZAsJl0QA6Ce1lsDRDu2WMycBIB6Wg8CKNDFThiXbxgGQABoTbf7IKVlyfW9CgNAAGhNN/sgna/SXCpAyu2kLQDZMDQBpMRRBIAuBFC5Y+XeEQApFMc2AEBt2UXUfB8AIABEs4uohT5I1kB+gNgcN9Z4DIACLQsAtesYgIye2jgCOT0RIIPrQjGKANDeAGW7MuehPdwXIGtmLRSjCABdEaDvZ2XLf2nWOttQBNNC8wApcYI2adI2AEBt2UXUHQAKUjED71N7j96wJDekNICWz3gDTwJAui4LkMJP7GvRp+YQRT8ySfYUKmnUUXoAkNSRANHJRAEozZADSPapuSC2AEo4oYMVCwaACjoQIPK+HiNAay9qb/w6gHgGnmwDJEqg8ToD9Pl8xBYAGmcGhjDMF03ry2/S78/vy9wRadK0pisZ5m4j/Tkbk5wxK02iyTQpCfabXYRJRDwL60ob1AH0mX/SLQA0zW/fQWv+n5+flh8Gwsea9Pui9dnsC3NWureWxUte/EvUNGmNmha6xlKqTbzEo7Y8AGrLTqMa796UGAsgPT/lg/A2JEzpANFSYnwaVcEsrR8BiMXRWn4zQP9+lDddXD2+oSwPUEg6fcGCJPHMpCsNgAalYwUJlAgWdSlGhqeFyjiZ5sEItClqCSAyfWidxLLWAhT4dKQRROcrORSqNRWe3UYgALSugfIE8TFHBYhOHyWAkpKDOh2thCVB5VyaZGUhRJLFz5sB6mMN8lOHQK5t2KVY4JdCa9JIMtDruJEksZLZdZcaVb8cDPx6cTRDG/wAILd1vQ3IbgGtNND7enPSFI+FwG7/kGJG8WI8ZLSwq0f97k0L50qh/IVVpM99oM/0oPtAnaxmH+QBktDRvjYKTXOqufgxsjfJW+JWnAQ13Ine1VrdBwwg4akHKPs0jziW7NU/kZhymIxFShsAIKe1fhaIhOgfprJhJQNQ9gkPbe7xAJQSqbQBAHJaS32t9676abwyabBjVc+Y2Rm2AETmRKUNAJDT2gYQ68pqGMj8V+nxABTHHQC0s/UQgEKqSk/yMpua/ipjGSsB0M7WGwC0uloAooPfCID2shb7YNSSCgCNZM8JULTVAMRDj7gK29d6CECuNZAXIH6QtgEAclqPAchzFeYBiFZeawMA5LTuC9BI93IeG4amNdColSBqE9sAADmtdQCNLKkHQHFtUhpNtKswo1AWkOZSBICuC5A0jyGJyq+OKqYjAHRB61kAifszLoCsgMVcAKgvQKORNLKk3QHKRQVAV7K6AKLZzwEoG5BVUAoAXQQgnkHIWANtHveKAkDHWE8DiD9l2hi1KAB0oDXfb0pSD4BY1jqA6gWADrTK1tUavQogS3UAFaPWi3FteAHQTgBpyXcGyPICoLMA0rABQOd35TnWLSNQOb88BoByuq81u/Clu/sBtDlqLmDcAkAnWAEQAHJZARAAclkBEAByWQEQAHJZARDkUpC72e9Fyx0MJAPdy5WSy5lVULZsYQTaw7rfCJTLriRfdQTSCmyp49OtAAgAuawACAD1tAIgAOSylgDK8QOAynq8NenZ9qgAqKjHWwEQAHJZARAAclkBEAByWQEQAHJZARAAclkBEADyWNOOBUAA6GArACoK1pwAUFGw5gSAioI1p8MBYm4AdHNrPUCWGQC92noiQDkvALqLFQBtrSKsfwJAW6sI658A0NYqwhoFgDZUEdZV7HIIAMHqsgIgWF1WAASrywqAYHVZARCsLms9QP6oAOiB1jsB9Pl84tayCYDOtd4IoM/8E38BoPOttwQo5QcAvcfaD6BlBvv3o7wJepGaRiCsgd5n3T4C/Y04BBsA9EJrv0U0AHqltesiGgC9z9rnPtBnSu8IAaAXWXEnGlYABOt5VgAEKwCC9TwrAIIVAMF6nhUAwXpBgBSd8wErop4dFgAhqissAEJUV1gAhKiusPgvLyGXABDkEgCCXAJAkEsACHKpE0Dp02YHaQ75OTb0HO74oJ/p4HNd/xgn+aWoD0D00elD9JlOC3tG4E8MflDANaL42wqi2wI0hz2Fn5MAOpSf6S0AnTODTQef7wmz9QsAOqEryw26X9yDo74EoPT3cWHPAYhsHBPy0QCd0KhLuONXJHLrkJhPBuiU66GTprAzzvVQgE64D/Q55Y5M+b7IPlFJ8CNjHnQfCHqtABDkEgCCXAJAkEsACHIJAEEuAaA68XZCu81CQ2wT2m0WGmKb0G6z0BB1Gn7/DcNfc/3+Gr6/h6UFX9uOrz3xRv2SMsy/p+/2MCX7p1buTL33zNvEgEl/T8ObW/HFp94kDaBhWOa0M2t2st587i2yRqDl4Gv15nNvUQ4gTGFQUXzRjEX0rPeeeZvIohmX8VGvPXGojwAQ5BIAglwCQJBLAAhyCQBBLgEgyCUABLkEgCCXABDk0n/qHSGrdueIWAAAAABJRU5ErkJggg==" /><!-- --></p>
+<p>In the case of exact_horseshoe, since the <span class="math inline">\(D\)</span> is used as is, it can always be thought
+of as <span class="math inline">\(length(S) = 500\)</span>. On the other
+hand, since the method of setting the threshold is different in
+approx_horseshoe and modified approx_horseshoe, a difference occurs in
+<span class="math inline">\(length(S) = s_{\delta}\)</span>, which
+causes a difference in the calculation speed of the algorithm.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>exact_activeset <span class="ot">&lt;-</span> <span class="fu">rep</span>(p, <span class="dv">500</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>approx_activeset <span class="ot">&lt;-</span> <span class="fu">apply</span>(approx_horseshoe_result<span class="sc">$</span>ActiveSet, <span class="at">MARGIN =</span> <span class="dv">1</span>, sum)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>mapprox_activeset <span class="ot">&lt;-</span> <span class="fu">apply</span>(mapprox_horseshoe_result<span class="sc">$</span>ActiveSet, <span class="at">MARGIN =</span> <span class="dv">1</span>, sum)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co"># active set plot</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">X =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">500</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>                         <span class="at">exact_activeset =</span> exact_activeset,</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>                         <span class="at">approx_activeset =</span> approx_activeset,</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>                         <span class="at">mapprox_activeset =</span> mapprox_activeset)) <span class="sc">+</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> X, <span class="at">y =</span> exact_activeset,</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>                          <span class="at">color =</span> <span class="st">&quot;exact&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> X, <span class="at">y =</span> approx_activeset,</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>                          <span class="at">color =</span> <span class="st">&quot;approx&quot;</span>),</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>            <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> X, <span class="at">y =</span> mapprox_activeset,</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>                          <span class="at">color =</span> <span class="st">&quot;modified_approx&quot;</span>),</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>            <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">name =</span> <span class="st">&quot;algorithm&quot;</span>,</span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>                     <span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;black&quot;</span>, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>), </span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>                     <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">&quot;exact&quot;</span>, <span class="st">&quot;approx&quot;</span>, <span class="st">&quot;modified_approx&quot;</span>), </span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;exact&quot;</span>, <span class="st">&quot;approx&quot;</span>, <span class="st">&quot;modified_approx&quot;</span>))</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<p>Bhattacharya, A., Chakraborty, A., &amp; Mallick, B. K. (2016). Fast
+sampling with Gaussian scale mixture priors in high-dimensional
+regression. Biometrika, asw042.</p>
+<p>Johndrow, J., Orenstein, P., &amp; Bhattacharya, A. (2020). Scalable
+Approximate MCMC Algorithms for the Horseshoe Prior. In Journal of
+Machine Learning Research (Vol. 21).</p>
+<p>Piironen, J., &amp; Vehtari, A. (2017). Sparsity information and
+regularization in the horseshoe and other shrinkage priors. Electronic
+Journal of Statistics, 11, 5018-5051.</p>
+<p>Roberts G, Rosenthal J. Coupling and ergodicity of adaptive Markov
+chain Monte Carlo algorithms. J Appl Prob. 2007;44:458–475.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
