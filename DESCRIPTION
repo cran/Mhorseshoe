@@ -1,6 +1,6 @@
 Package: Mhorseshoe
 Title: Approximate Algorithm for Horseshoe Prior
-Version: 0.1.0
+Version: 0.1.2
 Authors@R: c(
     person("Kang", "Mingi", , "leehuimin115@g.skku.edu", role = c("aut","cre")),
     person("Lee", "Kyoungjae", , "leekjstat@gmail.com", role = "aut"))
@@ -19,9 +19,9 @@ License: MIT + file LICENSE
 Suggests: knitr, rmarkdown, ggplot2, horseshoe
 VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2023-11-21 12:12:09 UTC; rkdal
+Packaged: 2023-11-23 04:23:29 UTC; rkdal
 Author: Kang Mingi [aut, cre],
   Lee Kyoungjae [aut]
 Maintainer: Kang Mingi <leehuimin115@g.skku.edu>
 Repository: CRAN
-Date/Publication: 2023-11-21 18:30:02 UTC
+Date/Publication: 2023-11-24 09:20:10 UTC

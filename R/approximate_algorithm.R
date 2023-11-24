@@ -148,7 +148,7 @@
 #' @examples
 #' # Making simulation data.
 #' set.seed(123)
-#' N <- 50
+#' N <- 200
 #' p <- 100
 #' true_beta <- c(rep(1, 10), rep(0, 90))
 #'
@@ -167,13 +167,9 @@
 #' # Run with auto.threshold option
 #' result1 <- approx_horseshoe(X, y, burn = 0, iter = 100)
 #'
-#' # Run with fixed default threshold
-#' result2 <- approx_horseshoe(X, y, burn = 0, iter = 100,
-#'                             auto.threshold = FALSE)
-#'
 #' # Run with fixed custom threshold
-#' result3 <- approx_horseshoe(X, y, burn = 0, iter = 100,
-#'                             auto.threshold = FALSE, threshold = 1/(2 * p))
+#' result2 <- approx_horseshoe(X, y, burn = 0, iter = 100,
+#'                             auto.threshold = FALSE, threshold = 1/(5 * p))
 #'
 #' # posterior mean
 #' betahat <- result1$BetaHat
@@ -221,6 +217,18 @@ approx_horseshoe <- function(X, y, burn = 1000, iter = 5000,
       max_xi <- max(xi, new_xi)
       active_index <- which((1/(eta * max_xi) > threshold))
       S <- length(active_index)
+    }
+    if (S == 0) {
+      warning("All coefficients in the linear model are estimated to be 0, ",
+              "so the algorithm terminates and the sampling results are ",
+              "returned. This problem may be caused by the threshold being ",
+              "set too large. To solve this, Use the auto.threshold option, ",
+              "or if you set auto.threshold == FALSE, set the threshold ",
+              "argument smaller. Alternatively, run the exact_horseshoe ",
+              "function instead of approx_horseshoe and check the results.")
+      burn <- 0
+      nmc <- i
+      break
     }
     Q_s <- Q[active_index, active_index, drop = FALSE]
     X_s <- X[, active_index, drop = FALSE]
@@ -295,15 +303,15 @@ approx_horseshoe <- function(X, y, burn = 1000, iter = 5000,
       v_star <- solve(M, (y/sqrt(sigma2) - v))
       new_beta <- sqrt(sigma2) * (u + U %*% v_star)
     }
+    # eta update
+    eta <- rejection_sampler((new_beta^2)*xi/(2*sigma2), a, b)
+    eta <- ifelse(eta <= 2.220446e-16, 2.220446e-16, eta)
     # save results
     betaout[i, ] <- new_beta
     etaout[i, ] <- eta
     xiout[i] <- xi
     sigma2out[i] <- sigma2
     activeout[i, active_index] <- 1
-    # eta update
-    eta <- rejection_sampler((new_beta^2)*xi/(2*sigma2), a, b)
-    eta <- ifelse(eta <= 2.220446e-16, 2.220446e-16, eta)
     # when use a auto threshold
     if (auto.threshold == TRUE) {
       if (i %% t == 0) {
@@ -318,9 +326,9 @@ approx_horseshoe <- function(X, y, burn = 1000, iter = 5000,
       S <- length(active_index)
     }
   }
-  betaout <- betaout[(burn+1):nmc, ]
-  lambdaout <- 1/sqrt(etaout[(burn+1):nmc, ])
-  activeout <- activeout[(burn+1):nmc, ]
+  betaout <- betaout[(burn+1):nmc, , drop = FALSE]
+  lambdaout <- 1/sqrt(etaout[(burn+1):nmc, , drop = FALSE])
+  activeout <- activeout[(burn+1):nmc, , drop = FALSE]
   tauout <- 1/sqrt(xiout[(burn+1):nmc])
   sigma2out <- sigma2out[(burn+1):nmc]
   betahat <- apply(betaout, 2, mean)

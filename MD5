@@ -1,10 +1,10 @@
-795dbb559c8e0683a0595c2aff0cd46d *DESCRIPTION
+81159a84298e8d086dfe40856abdfc75 *DESCRIPTION
 f881c8d51e32590b31020fb56d19d6fb *LICENSE
 60d1532018f8069c2f5382d44b124bbb *NAMESPACE
-8b7e5f9e215ba0ea42cc3cdad1d8e4c2 *NEWS.md
+a226cc25e886804b7501170057958639 *NEWS.md
 7e15fca2fae0f91e4d51e5e2c3eb16af *R/RcppExports.R
-52e104dca5cbb86f934b3b9ee7d42d5a *R/approximate_algorithm.R
-6a2b151d3c5af3b4fadaad06579f0ef7 *R/exact_algorithm.R
+902c07da5cde30f46b69ecca856af227 *R/approximate_algorithm.R
+ad07bd09ed43b4f897bf92d3b26b08b1 *R/exact_algorithm.R
 3f690e16f4480eda2c6f09c58d026d4a *R/package-Mhorseshoe.R
 710951cd4a0ddaccbd04919a0f2e9ce1 *README.md
 cc3e959079d8439842ed19c4305f9f94 *build/vignette.rds
@@ -12,7 +12,7 @@ cc3e959079d8439842ed19c4305f9f94 *build/vignette.rds
 a9cf6998d3fe848524f4c3fb842400db *inst/doc/Mhorseshoe.Rmd
 d80d542ad876ce470872076a64b9d543 *inst/doc/Mhorseshoe.html
 735d52724c1d9f00ae87431fc00b7875 *man/Mhorseshoe.Rd
-4ff9a3d2713329144f6d018f8e830f14 *man/approx_horseshoe.Rd
+5d7826b7b6f4427e0a0d51653a36bf41 *man/approx_horseshoe.Rd
 9ec00643f16dbec227afdbf0aa9096af *man/exact_horseshoe.Rd
 9a2be6c39daf438062e35e6b129c6c96 *man/rejection_sampler.Rd
 93984b2ae84eebab0143d497574a02dd *src/RcppExports.cpp
