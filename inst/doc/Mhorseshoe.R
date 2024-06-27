@@ -35,8 +35,8 @@ horseshoe_result <- horseshoe::horseshoe(y, X, method.tau = "halfCauchy",
                                          method.sigma = "Jeffreys",
                                          burn = 0, nmc = 500)
 
-# exact_horseshoe.
-exact_horseshoe_result <- exact_horseshoe(X, y, burn = 0, iter = 500)
+# exact_horseshoe in Mhorseshoe package.
+exact_horseshoe_result <- exact_horseshoe(y, X, burn = 0, iter = 500)
 
 df <- data.frame(index = 1:100,
                  horseshoe_BetaHat = horseshoe_result$BetaHat[1:100],
@@ -47,31 +47,33 @@ df <- data.frame(index = 1:100,
                  exhorseshoe_RightCI = exact_horseshoe_result$RightCI[1:100],
                  true_beta = true_beta[1:100])
 
-# Estimation results of the horseshoe.
+# Estimation results of the horseshoe in horseshoe package.
 ggplot(data = df, aes(x = index, y = true_beta)) + 
   geom_point(size = 2) + 
   geom_point(aes(x = index, y = horseshoe_BetaHat), size = 2, col = "red") +
   geom_errorbar(aes(ymin = horseshoe_LeftCI,
                     ymax = horseshoe_RightCI), width = .1, col = "red") +
-  labs(title = "95% Credible intervals of the horseshoe function", y = "beta")
+  labs(title = "95% Credible intervals of the horseshoe in horseshoe package", 
+       y = "beta")
 
-# Estimation results of the exact_horseshoe.
+# Estimation results of the exact_horseshoe in Mhorseshoe package.
 ggplot(data = df, aes(x = index, y = true_beta)) + 
   geom_point(size = 2) + 
   geom_point(aes(x = index, y = exhorseshoe_BetaHat), 
              size = 2, col = "red") +
   geom_errorbar(aes(ymin = exhorseshoe_LeftCI, 
                     ymax = exhorseshoe_RightCI), width = .1, col = "red") +
-  labs(title = "95% Credible intervals of the exact_horseshoe function",
-       y = "beta")
+  labs(title = "95% Credible intervals of the exact_horseshoe in Mhorseshoe 
+       package", y = "beta")
 
 ## ----fig.width = 6, fig.height= 4---------------------------------------------
-# approx_horseshoe with fixed default threshold.
-approx_horseshoe_result <- approx_horseshoe(X, y, burn = 0, iter = 500, 
+# approximate algorithm with fixed default threshold.
+approx_horseshoe_result <- approx_horseshoe(y, X, burn = 0, iter = 500, 
                                             auto.threshold = FALSE)
 
-# modified approx_horseshoe with adaptive probability algorithm.
-mapprox_horseshoe_result <- approx_horseshoe(X, y, burn = 0, iter = 500)
+# modified approximate algorithm.
+mapprox_horseshoe_result <- approx_horseshoe(y, X, burn = 0, iter = 500,
+                                             auto.threshold = TRUE)
 
 df2 <- data.frame(index = 1:100,
                   approx_BetaHat = approx_horseshoe_result$BetaHat[1:100],
@@ -82,7 +84,7 @@ df2 <- data.frame(index = 1:100,
                   mapprox_RightCI = mapprox_horseshoe_result$RightCI[1:100],
                   true_beta = true_beta[1:100])
 
-# Estimation results of the approx_horseshoe.
+# Estimation results of the approximate algorithm.
 ggplot(data = df2, aes(x = index, y = true_beta)) + 
   geom_point(size = 2) + 
   geom_point(aes(x = index, y = approx_BetaHat), size = 2, col = "red") +
@@ -90,7 +92,7 @@ ggplot(data = df2, aes(x = index, y = true_beta)) +
                     ymax = approx_RightCI), width = .1, col = "red") +
   labs(title = "95% Credible intervals of the approx_horseshoe", y = "beta")
 
-# Estimation results of the mapprox_horseshoe.
+# Estimation results of the modified approximate algorithm.
 ggplot(data = df2, aes(x = index, y = true_beta)) + 
   geom_point(size = 2) + 
   geom_point(aes(x = index, y = mapprox_BetaHat), 
